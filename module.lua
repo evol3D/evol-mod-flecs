@@ -1,6 +1,6 @@
 { 
-  name = "bullet3",
+  name = "flecs",
   version = "0.1",
-  categories = {"Physics"},
+  categories = {"world"},
   dependencies = {}
 }
