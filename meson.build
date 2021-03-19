@@ -25,6 +25,9 @@ endif
 if fs.is_file('meta/evmod.events')
   mod_args += '-DEVMOD_EVENTS_DEF'
 endif
+if fs.is_file('meta/evmod.types')
+  mod_args += '-DEVMOD_TYPES_DEF'
+endif
 
 mod_incdir = ['..']
 
