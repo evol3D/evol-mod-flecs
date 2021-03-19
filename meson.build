@@ -1,16 +1,35 @@
-project('template', 'c',
+project('evol-mod-flecs', 'c',
 version : '0.1',
-default_options : ['warning_level=3'])
+default_options : ['warning_level=3', 'c_std=c11'])
+
+# Meson modules import
+fs = import('fs')
 
 cc = meson.get_compiler('c')
 
 mod_src = [
-  'src/template.c'
+  'src/mod.c'
 ]
 
-mod_incdir = [ '..' ]
+mod_args = []
+
+# GCC arg for ms-extensions (specifically, nameless anonymous structs/unions)
+if build_machine.system() != 'windows'
+  mod_args += '-fms-extensions'
+endif
+
+# Metafiles c_args defs
+if fs.is_file('meta/evmod.namespaces')
+  mod_args += '-DEVMOD_NAMESPACES_DEF'
+endif
+if fs.is_file('meta/evmod.events')
+  mod_args += '-DEVMOD_EVENTS_DEF'
+endif
+
+mod_incdir = ['..']
 
 evol_dep = dependency('evol')
+
 dl_dep = cc.find_library('dl', required: false)
 
 mod_deps = [
@@ -22,8 +41,8 @@ moduleconfig = get_option('moduleconfig')
 configure_file(
   input: moduleconfig,
   command: [
-    meson.project_source_root() + '/subprojects/luajit/src/luajit', 
-    meson.project_source_root() + '/subprojects/evol/buildscripts/bin2cstring.lua', 
+    meson.source_root() + '/subprojects/luajit/src/luajit',
+    meson.source_root() + '/subprojects/evol/buildscripts/bin2cstring.lua',
     meson.project_source_root() + '/' + moduleconfig
   ],
   output: moduleconfig + '.h',
@@ -31,9 +50,10 @@ configure_file(
 )
 
 module = shared_module(
-  'template', mod_src,
+  'evmodflecs', mod_src,
   include_directories: mod_incdir,
   dependencies: mod_deps,
+  c_args: mod_args,
 )
 
 mod_dep = declare_dependency(
@@ -41,5 +61,5 @@ mod_dep = declare_dependency(
 )
 
 if meson.version().version_compare('>= 0.54.0')
-  meosn.override_dependency('evmod_template', mod_dep)
+  meson.override_dependency('evmod_world', mod_dep)
 endif
