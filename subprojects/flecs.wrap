@@ -1,0 +1,8 @@
+[wrap-git]
+directory = flecs
+url = https://github.com/sandermertens/flecs
+revision = v2.3.2
+depth = 1
+
+[provide]
+dependency_names = flecs
