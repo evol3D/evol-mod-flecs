@@ -1,0 +1,3 @@
+
+TYPE(ECSEntityID, U64)
+TYPE(ECSComponentID, U64)

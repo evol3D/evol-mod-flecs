@@ -35,9 +35,12 @@ evol_dep = dependency('evol')
 
 dl_dep = cc.find_library('dl', required: false)
 
+flecs_dep = dependency('flecs')
+
 mod_deps = [
   evol_dep,
   dl_dep,
+  flecs_dep,
 ]
 
 moduleconfig = get_option('moduleconfig')
@@ -65,5 +68,5 @@ mod_dep = declare_dependency(
 )
 
 if meson.version().version_compare('>= 0.54.0')
-  meson.override_dependency('evmod_world', mod_dep)
+  meson.override_dependency('evmod_ecs', mod_dep)
 endif
