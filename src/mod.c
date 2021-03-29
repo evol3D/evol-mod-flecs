@@ -5,8 +5,8 @@
 
 struct ECSData {
   ecs_world_t *activeScene;
+  ecs_entity_t pipelineStages[EV_ECS_PIPELINE_STAGE_COUNT];
 } ECSData;
-
 
 EV_CONSTRUCTOR 
 {
@@ -35,11 +35,37 @@ U32 _ev_ecs_update(F32 deltaTime)
   return result?0:1;
 }
 
+void _ev_ecs_init_pipeline()
+{
+  #define STAGE(name) EV_CONCAT(name, _IMPL)
+
+  ECS_TAG(ECSData.activeScene, EV_ECS_PIPELINE_STAGE_PREUPDATE_IMPL);
+  ECSData.pipelineStages[EV_ECS_PIPELINE_STAGE_PREUPDATE] = STAGE(EV_ECS_PIPELINE_STAGE_PREUPDATE);
+
+  ECS_TAG(ECSData.activeScene, EV_ECS_PIPELINE_STAGE_UPDATE_IMPL);
+  ECSData.pipelineStages[EV_ECS_PIPELINE_STAGE_UPDATE] = STAGE(EV_ECS_PIPELINE_STAGE_UPDATE);
+
+  ECS_TAG(ECSData.activeScene, EV_ECS_PIPELINE_STAGE_POSTUPDATE_IMPL);
+  ECSData.pipelineStages[EV_ECS_PIPELINE_STAGE_POSTUPDATE] = STAGE(EV_ECS_PIPELINE_STAGE_POSTUPDATE);
+
+  ECS_PIPELINE(ECSData.activeScene, evECSPipeline, 
+    EV_ECS_PIPELINE_STAGE_PREUPDATE_IMPL,
+    EV_ECS_PIPELINE_STAGE_UPDATE_IMPL,
+    EV_ECS_PIPELINE_STAGE_POSTUPDATE_IMPL
+  );
+
+  ecs_set_pipeline(ECSData.activeScene, evECSPipeline);
+
+  #undef STAGE
+}
+
 U32 _ev_ecs_newscene()
 {
   DEBUG_ASSERT(!ECSData.activeScene);
 
   ECSData.activeScene = ecs_init();
+
+  _ev_ecs_init_pipeline();
 
   // TODO enable after initializing the OS API
   /* ecs_enable_locking(ECSData.activeScene, 1); */
@@ -83,12 +109,47 @@ U32 _ev_ecs_addcomponent(ECSEntityID entt, ECSComponentID cmp, U32 cmp_size, PTR
   return 0;
 }
 
+U32 _ev_ecs_enableentity(ECSEntityID entt)
+{
+  ecs_enable(ECSData.activeScene, entt, true);
+  return 0;
+}
+
+U32 _ev_ecs_disableentity(ECSEntityID entt)
+{
+  ecs_enable(ECSData.activeScene, entt, false);
+  return 0;
+}
+
+U32 _ev_ecs_registersystem(CONST_STR sig, ECSPipelineStage stage, FN_PTR fn, CONST_STR name)
+{
+  ecs_new_system(ECSData.activeScene, 0, name, ECSData.pipelineStages[stage], sig, (ecs_iter_action_t)fn);
+  return 0;
+}
+
+PTR _ev_ecs_getquerycolumn(ECSQuery query, U32 size, U32 idx)
+{
+  ecs_iter_t *iter = (ecs_iter_t *)query;
+  return ecs_column_w_size(iter, size, idx);
+}
+
+U32 _ev_ecs_getquerymatchcount(ECSQuery query)
+{
+  return ((ecs_iter_t *)query)->count;
+}
+
 EV_BINDINGS
 {
   EV_NS_BIND_FN(ECS, update, _ev_ecs_update);
 
   EV_NS_BIND_FN(ECS, registerComponent, _ev_ecs_registercomponent);
+  EV_NS_BIND_FN(ECS, registerSystem, _ev_ecs_registersystem);
 
+  EV_NS_BIND_FN(ECS, getQueryColumn, _ev_ecs_getquerycolumn);
+  EV_NS_BIND_FN(ECS, getQueryMatchCount, _ev_ecs_getquerymatchcount);
+
+  EV_NS_BIND_FN(ECS, enableEntity, _ev_ecs_enableentity);
+  EV_NS_BIND_FN(ECS, disableEntity, _ev_ecs_disableentity);
   EV_NS_BIND_FN(ECS, createEntity, _ev_ecs_createentity);
   EV_NS_BIND_FN(ECS, addComponent, _ev_ecs_addcomponent);
 

@@ -3,6 +3,13 @@ EV_NS_DEF_BEGIN(ECS)
 EV_NS_DEF_FN(U32, update, (F32, deltaTime))
 
 EV_NS_DEF_FN(ECSComponentID, registerComponent, (CONST_STR, cmp_name), (U32, cmp_size), (U32, cmp_align))
+EV_NS_DEF_FN(U32, registerSystem, (CONST_STR, sig), (ECSPipelineStage, stage), (FN_PTR, fn), (CONST_STR, name))
+
+EV_NS_DEF_FN(PTR, getQueryColumn, (ECSQuery, query), (U32, size), (U32, idx))
+EV_NS_DEF_FN(U32, getQueryMatchCount, (ECSQuery, query))
+
+EV_NS_DEF_FN(U32, enableEntity, (ECSEntityID, entt))
+EV_NS_DEF_FN(U32, disableEntity, (ECSEntityID, entt))
 
 EV_NS_DEF_FN(ECSEntityID, createEntity)
 EV_NS_DEF_FN(U32, addComponent, (ECSEntityID, entt), (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
