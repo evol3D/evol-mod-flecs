@@ -1,6 +1,8 @@
 #define EV_MODULE_DEFINE
 #include <evol/evolmod.h>
 
+#include <os_api.h>
+
 #include <flecs.h>
 
 struct ECSData {
@@ -18,8 +20,7 @@ EV_CONSTRUCTOR
   ecs_os_set_api_defaults();
   ecs_os_api_t api = ecs_os_api;
 
-  // TODO get ev_flecs_init_os_api from evol-legacy
-  /* ev_flecs_init_os_api(&api); */
+  ev_flecs_init_os_api(&api);
 
   ecs_os_set_api(&api);
 
@@ -67,19 +68,18 @@ U32 _ev_ecs_newscene()
 
   _ev_ecs_init_pipeline();
 
-  // TODO enable after initializing the OS API
-  /* ecs_enable_locking(ECSData.activeScene, 1); */
+  ecs_enable_locking(ECSData.activeScene, 1);
 }
 
 U32 _ev_ecs_unlock()
 {
-  /* ecs_unlock(ECSData.activeScene); */
+  ecs_unlock(ECSData.activeScene);
   return 0;
 }
 
 U32 _ev_ecs_lock()
 {
-  /* ecs_lock(ECSData.activeScene); */
+  ecs_lock(ECSData.activeScene);
   return 0;
 }
 

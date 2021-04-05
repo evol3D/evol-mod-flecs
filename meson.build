@@ -8,7 +8,8 @@ fs = import('fs')
 cc = meson.get_compiler('c')
 
 mod_src = [
-  'src/mod.c'
+  'src/mod.c',
+  'src/os_api.c',
 ]
 
 mod_args = []
@@ -29,7 +30,7 @@ if fs.is_file('meta/evmod.types')
   mod_args += '-DEVMOD_TYPES_DEF'
 endif
 
-mod_incdir = ['..']
+mod_incdir = ['..', 'include']
 
 evol_dep = dependency('evol')
 
