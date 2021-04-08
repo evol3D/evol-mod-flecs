@@ -11,12 +11,12 @@ EV_NS_DEF_FN(U32, getQueryMatchCount, (ECSQuery, query))
 EV_NS_DEF_FN(U32, enableEntity, (ECSEntityID, entt))
 EV_NS_DEF_FN(U32, disableEntity, (ECSEntityID, entt))
 
-EV_NS_DEF_FN(ECSEntityID, createEntity)
+EV_NS_DEF_FN(ECSEntityID, createEntity, (,))
 EV_NS_DEF_FN(U32, addComponent, (ECSEntityID, entt), (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
 
-EV_NS_DEF_FN(U32, newScene)
+EV_NS_DEF_FN(U32, newScene, (,))
 
-EV_NS_DEF_FN(U32, lock)
-EV_NS_DEF_FN(U32, unlock)
+EV_NS_DEF_FN(U32, lock, (,))
+EV_NS_DEF_FN(U32, unlock, (,))
 
 EV_NS_DEF_END(ECS)
