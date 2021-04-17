@@ -1,5 +1,7 @@
 TYPE(ECSEntityID, U64)
-TYPE(ECSComponentID, U64)
+TYPE(ECSSystemID, ECSEntityID)
+TYPE(ECSComponentID, ECSEntityID)
+TYPE(ECSTagID, ECSEntityID)
 
 TYPE(ECSQuery, PTR)
 
