@@ -18,12 +18,21 @@ EV_NS_DEF_FN(U32, disableEntity, (ECSEntityID, entt))
 EV_NS_DEF_FN(ECSEntityID, createEntity, (,))
 EV_NS_DEF_FN(U32, addComponent, (ECSEntityID, entt), (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
 EV_NS_DEF_FN(U32, addTag, (ECSEntityID, entt), (ECSTagID, tag))
+EV_NS_DEF_FN(bool, hasTag, (ECSEntityID, entt), (ECSTagID, tag))
+EV_NS_DEF_FN(bool, removeTag, (ECSEntityID, entt), (ECSTagID, tag))
 
 EV_NS_DEF_FN(PTR, getComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
+EV_NS_DEF_FN(bool, hasComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
+
+EV_NS_DEF_FN(ECSEntityID, getParent, (ECSEntityID, entt))
 
 EV_NS_DEF_FN(U32, newScene, (,))
 
 EV_NS_DEF_FN(U32, lock, (,))
 EV_NS_DEF_FN(U32, unlock, (,))
+
+EV_NS_DEF_FN(void, addChild, (ECSEntityID, parent), (ECSEntityID, child))
+EV_NS_DEF_FN(ECSEntityID, createChild, (ECSEntityID, parent))
+EV_NS_DEF_FN(void, forEachChild, (ECSEntityID, entt), (void(*iter_fn)(ECSEntityID),))
 
 EV_NS_DEF_END(ECS)

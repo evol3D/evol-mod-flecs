@@ -158,6 +158,21 @@ _ev_ecs_createentity()
   return ecs_new(ECSData.activeScene, 0);
 }
 
+EVMODAPI void
+_ev_ecs_addchild(
+    ECSEntityID parent,
+    ECSEntityID child)
+{
+  ecs_add_entity(ECSData.activeScene, child, ECS_CHILDOF | parent);
+}
+
+EVMODAPI ECSEntityID
+_ev_ecs_createchild(
+    ECSEntityID parent)
+{
+  return ecs_new_w_entity(ECSData.activeScene, ECS_CHILDOF | parent);
+}
+
 EV_DESTRUCTOR 
 {
   if(ECSData.activeScene)
@@ -188,6 +203,14 @@ _ev_ecs_addtag(
   return 0;
 }
 
+EVMODAPI bool
+_ev_ecs_hastag(
+    ECSEntityID entt,
+    ECSTagID tag)
+{
+  return ecs_has_entity(ECSData.activeScene, entt, tag);
+}
+
 EVMODAPI U32 
 _ev_ecs_enableentity(
     ECSEntityID entt)
@@ -202,6 +225,13 @@ _ev_ecs_disableentity(
 {
   ecs_enable(ECSData.activeScene, entt, false);
   return 0;
+}
+
+EVMODAPI ECSEntityID
+_ev_ecs_getparent(
+    ECSEntityID entt)
+{
+  return ecs_get_parent_w_entity(ECSData.activeScene, entt, 0);
 }
 
 EVMODAPI ECSSystemID 
@@ -257,6 +287,36 @@ _ev_ecs_getcomponent(
   return ecs_get_mut_w_entity(ECSData.activeScene, entt, cmp, NULL);
 }
 
+EVMODAPI bool
+_ev_ecs_hascomponent(
+    ECSEntityID entt,
+    ECSComponentID cmp)
+{
+  return ecs_has_entity(ECSData.activeScene, entt, cmp);
+}
+
+EVMODAPI void
+_ev_ecs_foreachchild(
+    ECSEntityID entt,
+    void(*iter_fn)(ECSEntityID))
+{
+  ecs_iter_t it = ecs_scope_iter(ECSData.activeScene, entt);
+
+  while(ecs_scope_next(&it)) {
+    for (int i = 0; i < it.count; i ++) {
+      iter_fn(it.entities[i]);
+    }
+  }
+}
+
+EVMODAPI void
+_ev_ecs_removetag(
+    ECSEntityID entt,
+    ECSTagID tag)
+{
+  ecs_remove_entity(ECSData.activeScene, entt, tag);
+}
+
 EV_BINDINGS
 {
   EV_NS_BIND_FN(ECS, update, _ev_ecs_update);
@@ -271,14 +331,23 @@ EV_BINDINGS
   EV_NS_BIND_FN(ECS, getQueryMatchCount, _ev_ecs_getquerymatchcount);
   EV_NS_BIND_FN(ECS, getQueryEntities, _ev_ecs_getqueryentities);
 
+  EV_NS_BIND_FN(ECS, forEachChild, _ev_ecs_foreachchild);
+
   EV_NS_BIND_FN(ECS, createEntity, _ev_ecs_createentity);
   EV_NS_BIND_FN(ECS, enableEntity, _ev_ecs_enableentity);
   EV_NS_BIND_FN(ECS, disableEntity, _ev_ecs_disableentity);
+  EV_NS_BIND_FN(ECS, addChild, _ev_ecs_addchild);
+  EV_NS_BIND_FN(ECS, createChild, _ev_ecs_createchild);
 
   EV_NS_BIND_FN(ECS, addComponent, _ev_ecs_addcomponent);
   EV_NS_BIND_FN(ECS, addTag, _ev_ecs_addtag);
+  EV_NS_BIND_FN(ECS, hasTag, _ev_ecs_hastag);
+  EV_NS_BIND_FN(ECS, removeTag, _ev_ecs_removetag);
 
   EV_NS_BIND_FN(ECS, getComponent, _ev_ecs_getcomponent);
+  EV_NS_BIND_FN(ECS, hasComponent, _ev_ecs_hascomponent);
+
+  EV_NS_BIND_FN(ECS, getParent, _ev_ecs_getparent);
 
   EV_NS_BIND_FN(ECS, newScene, _ev_ecs_newscene);
 
