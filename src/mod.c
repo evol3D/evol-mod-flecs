@@ -159,6 +159,13 @@ _ev_ecs_createentity()
 }
 
 EVMODAPI void
+_ev_ecs_deleteentity(
+    ECSEntityID entt)
+{
+  ecs_delete(ECSData.activeScene, entt);
+}
+
+EVMODAPI void
 _ev_ecs_addchild(
     ECSEntityID parent,
     ECSEntityID child)
@@ -366,6 +373,7 @@ EV_BINDINGS
   EV_NS_BIND_FN(ECS, forEachChild, _ev_ecs_foreachchild);
 
   EV_NS_BIND_FN(ECS, createEntity, _ev_ecs_createentity);
+  EV_NS_BIND_FN(ECS, deleteEntity, _ev_ecs_deleteentity);
   EV_NS_BIND_FN(ECS, enableEntity, _ev_ecs_enableentity);
   EV_NS_BIND_FN(ECS, disableEntity, _ev_ecs_disableentity);
   EV_NS_BIND_FN(ECS, addChild, _ev_ecs_addchild);

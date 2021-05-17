@@ -16,6 +16,8 @@ EV_NS_DEF_FN(U32, enableEntity, (ECSEntityID, entt))
 EV_NS_DEF_FN(U32, disableEntity, (ECSEntityID, entt))
 
 EV_NS_DEF_FN(ECSEntityID, createEntity, (,))
+EV_NS_DEF_FN(void, deleteEntity, (ECSEntityID, entt))
+
 EV_NS_DEF_FN(U32, addComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
 EV_NS_DEF_FN(U32, addTag, (ECSEntityID, entt), (ECSTagID, tag))
 EV_NS_DEF_FN(bool, hasTag, (ECSEntityID, entt), (ECSTagID, tag))
