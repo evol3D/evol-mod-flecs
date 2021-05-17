@@ -293,6 +293,14 @@ _ev_ecs_getqueryentities(
   return ((ecs_iter_t *)query)->entities;
 }
 
+EVMODAPI void
+_ev_ecs_modified(
+    ECSEntityID entt,
+    ECSComponentID comp)
+{
+  ecs_modified_w_entity(ECSData.activeScene, entt, comp);
+}
+
 // Assumes that the component is always mutable. Easier for scripting?
 EVMODAPI PTR
 _ev_ecs_getcomponent(
@@ -407,6 +415,8 @@ EV_BINDINGS
   EV_NS_BIND_FN(ECS, setOnAddTrigger, _ev_ecs_setonaddtrigger);
   EV_NS_BIND_FN(ECS, setOnRemoveTrigger, _ev_ecs_setonremovetrigger);
   EV_NS_BIND_FN(ECS, setOnSetTrigger, _ev_ecs_setonsettrigger);
+
+  EV_NS_BIND_FN(ECS, modified, _ev_ecs_modified);
 }
 
 // Initializing the scripting API

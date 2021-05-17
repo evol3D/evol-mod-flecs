@@ -42,4 +42,6 @@ EV_NS_DEF_FN(void, setOnAddTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_
 EV_NS_DEF_FN(void, setOnRemoveTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onremove_fn)(ECSQuery),))
 EV_NS_DEF_FN(void, setOnSetTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onset_fn)(ECSQuery),))
 
+EV_NS_DEF_FN(void, modified, (ECSEntityID, entt), (ECSComponentID, comp))
+
 EV_NS_DEF_END(ECS)
