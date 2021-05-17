@@ -319,6 +319,23 @@ _ev_ecs_hascomponent(
 }
 
 EVMODAPI void
+_ev_ecs_setsingleton(
+    ECSComponentID cmp,
+    U32 cmp_size,
+    PTR data)
+{
+  _ev_ecs_setcomponent(cmp, cmp, cmp_size, data);
+  _ev_ecs_modified(cmp, cmp);
+}
+
+EVMODAPI PTR
+_ev_ecs_getsingleton(
+    ECSComponentID cmp)
+{
+  return _ev_ecs_getcomponent(cmp, cmp);
+}
+
+EVMODAPI void
 _ev_ecs_foreachchild(
     ECSEntityID entt,
     void(*iter_fn)(ECSEntityID))
@@ -415,6 +432,9 @@ EV_BINDINGS
   EV_NS_BIND_FN(ECS, setOnAddTrigger, _ev_ecs_setonaddtrigger);
   EV_NS_BIND_FN(ECS, setOnRemoveTrigger, _ev_ecs_setonremovetrigger);
   EV_NS_BIND_FN(ECS, setOnSetTrigger, _ev_ecs_setonsettrigger);
+
+  EV_NS_BIND_FN(ECS, setSingleton, _ev_ecs_setsingleton);
+  EV_NS_BIND_FN(ECS, getSingleton, _ev_ecs_getsingleton);
 
   EV_NS_BIND_FN(ECS, modified, _ev_ecs_modified);
 }

@@ -23,9 +23,12 @@ EV_NS_DEF_FN(U32, addTag, (ECSEntityID, entt), (ECSTagID, tag))
 EV_NS_DEF_FN(bool, hasTag, (ECSEntityID, entt), (ECSTagID, tag))
 EV_NS_DEF_FN(bool, removeTag, (ECSEntityID, entt), (ECSTagID, tag))
 
-EV_NS_DEF_FN(PTR, setComponent, (ECSEntityID, entt), (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
+EV_NS_DEF_FN(U32, setComponent, (ECSEntityID, entt), (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
 EV_NS_DEF_FN(PTR, getComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
 EV_NS_DEF_FN(bool, hasComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
+
+EV_NS_DEF_FN(void, setSingleton, (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
+EV_NS_DEF_FN(PTR, getSingleton, (ECSComponentID, cmp))
 
 EV_NS_DEF_FN(ECSEntityID, getParent, (ECSEntityID, entt))
 
