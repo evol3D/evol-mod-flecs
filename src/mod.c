@@ -175,8 +175,7 @@ _ev_ecs_createchild(
 
 EV_DESTRUCTOR 
 {
-  if(ECSData.activeScene)
-  {
+  if(ECSData.activeScene) {
     ecs_fini(ECSData.activeScene);
   }
 
@@ -184,13 +183,22 @@ EV_DESTRUCTOR
 }
 
 EVMODAPI U32 
-_ev_ecs_addcomponent(
+_ev_ecs_setcomponent(
     ECSEntityID entt, 
-    ECSComponentID cmp, 
-    U32 cmp_size, 
+    ECSComponentID cmp,
+    U32 cmp_size,
     PTR data)
 {
   ecs_set_ptr_w_entity(ECSData.activeScene, entt, cmp, cmp_size, data);
+  return 0;
+}
+
+EVMODAPI U32 
+_ev_ecs_addcomponent(
+    ECSEntityID entt, 
+    ECSComponentID cmp)
+{
+  ecs_add_entity(ECSData.activeScene, entt, cmp);
   return 0;
 }
 
@@ -302,8 +310,13 @@ _ev_ecs_foreachchild(
 {
   ecs_iter_t it = ecs_scope_iter(ECSData.activeScene, entt);
 
+  /* printf("For each child in %llu\n", entt); */
+  /* printf("Type of %llu = %s\n", entt, ecs_type_str(ECSData.activeScene, ecs_type_from_entity(ECSData.activeScene, entt))); */
   while(ecs_scope_next(&it)) {
+    /* printf("\tChild Count: %d\n", it.count); */
     for (int i = 0; i < it.count; i ++) {
+      /* printf("\t\titer_fn(%llu)\n", it.entities[i]); */
+      /* printf("\t\tType of %llu = %s\n", it.entities[i], ecs_type_str(ECSData.activeScene, ecs_type_from_entity(ECSData.activeScene, it.entities[i]))); */
       iter_fn(it.entities[i]);
     }
   }
@@ -315,6 +328,25 @@ _ev_ecs_removetag(
     ECSTagID tag)
 {
   ecs_remove_entity(ECSData.activeScene, entt, tag);
+}
+
+EVMODAPI void
+_ev_ecs_setonaddtrigger(
+    CONST_STR trigger_name,
+    CONST_STR cmp_name,
+    void(*onaddfn)(ECSQuery))
+{
+  ecs_new_trigger(ECSData.activeScene, 0, trigger_name, EcsOnAdd, cmp_name, onaddfn); 
+}
+
+EVMODAPI void
+_ev_ecs_setonremovetrigger(
+    CONST_STR trigger_name,
+    CONST_STR cmp_name,
+    void(*onremovefn)(ECSQuery))
+{
+  ev_log_trace("Setting trigger %s for %s", trigger_name, cmp_name);
+  ecs_new_trigger(ECSData.activeScene, 0, trigger_name, EcsOnRemove, cmp_name, onremovefn); 
 }
 
 EV_BINDINGS
@@ -344,6 +376,7 @@ EV_BINDINGS
   EV_NS_BIND_FN(ECS, hasTag, _ev_ecs_hastag);
   EV_NS_BIND_FN(ECS, removeTag, _ev_ecs_removetag);
 
+  EV_NS_BIND_FN(ECS, setComponent, _ev_ecs_setcomponent);
   EV_NS_BIND_FN(ECS, getComponent, _ev_ecs_getcomponent);
   EV_NS_BIND_FN(ECS, hasComponent, _ev_ecs_hascomponent);
 
@@ -353,6 +386,9 @@ EV_BINDINGS
 
   EV_NS_BIND_FN(ECS, lock, _ev_ecs_lock);
   EV_NS_BIND_FN(ECS, unlock, _ev_ecs_unlock);
+
+  EV_NS_BIND_FN(ECS, setOnAddTrigger, _ev_ecs_setonaddtrigger);
+  EV_NS_BIND_FN(ECS, setOnRemoveTrigger, _ev_ecs_setonremovetrigger);
 }
 
 // Initializing the scripting API
