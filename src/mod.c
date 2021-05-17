@@ -356,6 +356,15 @@ _ev_ecs_setonremovetrigger(
   ecs_new_trigger(ECSData.activeScene, 0, trigger_name, EcsOnRemove, cmp_name, onremovefn); 
 }
 
+EVMODAPI void
+_ev_ecs_setonsettrigger(
+    CONST_STR trigger_name,
+    CONST_STR cmp_name,
+    void(*onsetfn)(ECSQuery))
+{
+ ecs_new_system(ECSData.activeScene, 0, trigger_name, EcsOnSet, cmp_name, onsetfn);
+}
+
 EV_BINDINGS
 {
   EV_NS_BIND_FN(ECS, update, _ev_ecs_update);
@@ -397,6 +406,7 @@ EV_BINDINGS
 
   EV_NS_BIND_FN(ECS, setOnAddTrigger, _ev_ecs_setonaddtrigger);
   EV_NS_BIND_FN(ECS, setOnRemoveTrigger, _ev_ecs_setonremovetrigger);
+  EV_NS_BIND_FN(ECS, setOnSetTrigger, _ev_ecs_setonsettrigger);
 }
 
 // Initializing the scripting API
