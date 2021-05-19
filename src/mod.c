@@ -377,7 +377,6 @@ _ev_ecs_setonremovetrigger(
     CONST_STR cmp_name,
     void(*onremovefn)(ECSQuery))
 {
-  ev_log_trace("Setting trigger %s for %s", trigger_name, cmp_name);
   ecs_new_trigger(ECSData.activeScene, 0, trigger_name, EcsOnRemove, cmp_name, onremovefn); 
 }
 
