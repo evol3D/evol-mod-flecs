@@ -11,7 +11,9 @@ flecs_dep = dependency('flecs')
 
 mod_src = [
   'src/mod.c',
-  'src/os_api.c',
+  'src/ecs/os_api.c',
+  'src/ecs/common_ecs.c',
+  'src/ecs/game_ecs.c',
 ]
 
 mod_incdir = [

@@ -1,50 +1,57 @@
 EV_NS_DEF_BEGIN(ECS)
 
-EV_NS_DEF_FN(U32, update, (F32, deltaTime))
-
-EV_NS_DEF_FN(ECSTagID, registerTag, (CONST_STR, tag_name))
-EV_NS_DEF_FN(ECSComponentID, registerComponent, (CONST_STR, cmp_name), (U32, cmp_size), (U32, cmp_align))
-EV_NS_DEF_FN(ECSSystemID, registerSystem, (CONST_STR, sig), (ECSPipelineStage, stage), (FN_PTR, fn), (CONST_STR, name))
-
-EV_NS_DEF_FN(void, setSystemRate, (ECSSystemID, system), (F32, rate))
-
 EV_NS_DEF_FN(PTR, getQueryColumn, (ECSQuery, query), (U32, size), (U32, idx))
 EV_NS_DEF_FN(U32, getQueryMatchCount, (ECSQuery, query))
 EV_NS_DEF_FN(ECSEntityID *, getQueryEntities, (ECSQuery, query))
 
-EV_NS_DEF_FN(U32, enableEntity, (ECSEntityID, entt))
-EV_NS_DEF_FN(U32, disableEntity, (ECSEntityID, entt))
+EV_NS_DEF_END(ECS)
 
-EV_NS_DEF_FN(ECSEntityID, createEntity, (,))
-EV_NS_DEF_FN(void, deleteEntity, (ECSEntityID, entt))
 
-EV_NS_DEF_FN(U32, addComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
-EV_NS_DEF_FN(U32, addTag, (ECSEntityID, entt), (ECSTagID, tag))
-EV_NS_DEF_FN(bool, hasTag, (ECSEntityID, entt), (ECSTagID, tag))
-EV_NS_DEF_FN(bool, removeTag, (ECSEntityID, entt), (ECSTagID, tag))
+EV_NS_DEF_BEGIN(GameECS)
 
-EV_NS_DEF_FN(U32, setComponent, (ECSEntityID, entt), (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
-EV_NS_DEF_FN(PTR, getComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
-EV_NS_DEF_FN(bool, hasComponent, (ECSEntityID, entt), (ECSComponentID, cmp))
+EV_NS_DEF_FN(ECSGameWorldHandle, newWorld, (,))
+EV_NS_DEF_FN(void, destroyWorld, (ECSGameWorldHandle, world))
+EV_NS_DEF_FN(U32, progress, (ECSGameWorldHandle, world), (F32, deltaTime))
 
-EV_NS_DEF_FN(void, setSingleton, (ECSComponentID, cmp), (U32, cmp_size), (PTR, data))
-EV_NS_DEF_FN(PTR, getSingleton, (ECSComponentID, cmp))
+EV_NS_DEF_FN(GameComponentID, registerComponent, (CONST_STR, cmp_name), (U32, cmp_size), (U32, cmp_align))
+EV_NS_DEF_FN(bool, hasComponent, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp))
+EV_NS_DEF_FN(U32, addComponent, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp))
+EV_NS_DEF_FN(PTR, getComponent, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp))
+EV_NS_DEF_FN(U32, setComponent, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp), (PTR, data))
+EV_NS_DEF_FN(void, modified, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, comp))
 
-EV_NS_DEF_FN(ECSEntityID, getParent, (ECSEntityID, entt))
+EV_NS_DEF_FN(GameTagID, registerTag, (CONST_STR, tag_name))
+EV_NS_DEF_FN(bool, hasTag, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameTagID, tag))
+EV_NS_DEF_FN(U32, addTag, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameTagID, tag))
+EV_NS_DEF_FN(void, removeTag, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameTagID, tag))
 
-EV_NS_DEF_FN(U32, newScene, (,))
+EV_NS_DEF_FN(GameSystemID, registerSystem, (CONST_STR, sig), (ECSPipelineStage, stage), (FN_PTR, fn), (CONST_STR, name))
+EV_NS_DEF_FN(void, setSystemRate, (GameSystemID, system), (F32, rate))
 
-EV_NS_DEF_FN(U32, lock, (,))
-EV_NS_DEF_FN(U32, unlock, (,))
 
-EV_NS_DEF_FN(void, addChild, (ECSEntityID, parent), (ECSEntityID, child))
-EV_NS_DEF_FN(ECSEntityID, createChild, (ECSEntityID, parent))
-EV_NS_DEF_FN(void, forEachChild, (ECSEntityID, entt), (void(*iter_fn)(ECSEntityID),))
+EV_NS_DEF_FN(void, setSingleton, (ECSGameWorldHandle, world), (GameComponentID, cmp), (PTR, data))
+EV_NS_DEF_FN(PTR, getSingleton, (ECSGameWorldHandle, world), (GameComponentID, cmp))
 
 EV_NS_DEF_FN(void, setOnAddTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onadd_fn)(ECSQuery),))
 EV_NS_DEF_FN(void, setOnRemoveTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onremove_fn)(ECSQuery),))
 EV_NS_DEF_FN(void, setOnSetTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onset_fn)(ECSQuery),))
 
-EV_NS_DEF_FN(void, modified, (ECSEntityID, entt), (ECSComponentID, comp))
+EV_NS_DEF_FN(GameEntityID, createEntity, (ECSGameWorldHandle, world_handle))
+EV_NS_DEF_FN(void, destroyEntity, (ECSGameWorldHandle, world_handle), (GameEntityID, entt))
 
-EV_NS_DEF_END(ECS)
+EV_NS_DEF_FN(GameEntityID, createChildEntity, (ECSGameWorldHandle, world_handle), (GameEntityID, parent))
+EV_NS_DEF_FN(void, addChildToEntity, (ECSGameWorldHandle, world_handle), (GameEntityID, parent), (GameEntityID, child))
+EV_NS_DEF_FN(void, forEachChild, (ECSGameWorldHandle, world), (GameEntityID, entt), (void(*iter_fn)(ECSGameWorldHandle, GameEntityID),))
+EV_NS_DEF_FN(GameEntityID, getParent, (ECSGameWorldHandle, world), (GameEntityID, entt))
+
+/* EV_NS_DEF_FN(U32, enableEntity, (ECSGameWorldHandle, world_handle), (GameEntityID, entt)) */
+/* EV_NS_DEF_FN(U32, disableEntity, (ECSGameWorldHandle, world_handle), (GameEntityID, entt)) */
+/* EV_NS_DEF_FN(U32, lock, (ECSGameWorldHandle, world_handle)) */
+/* EV_NS_DEF_FN(U32, unlock, (ECSGameWorldHandle, world_handle)) */
+
+EV_NS_DEF_END(GameECS)
+
+
+EV_NS_DEF_BEGIN(AssetECS)
+EV_NS_DEF_FN(ECSAssetWorldHandle, newWorld, (,))
+EV_NS_DEF_END(AssetECS)
