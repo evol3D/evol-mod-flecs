@@ -53,5 +53,45 @@ EV_NS_DEF_END(GameECS)
 
 
 EV_NS_DEF_BEGIN(AssetECS)
+
 EV_NS_DEF_FN(ECSAssetWorldHandle, newWorld, (,))
+EV_NS_DEF_FN(void, destroyWorld, (ECSAssetWorldHandle, world))
+EV_NS_DEF_FN(U32, progress, (ECSAssetWorldHandle, world), (F32, deltaTime))
+
+EV_NS_DEF_FN(AssetComponentID, registerComponent, (CONST_STR, cmp_name), (U32, cmp_size), (U32, cmp_align))
+EV_NS_DEF_FN(bool, hasComponent, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetComponentID, cmp))
+EV_NS_DEF_FN(U32, addComponent, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetComponentID, cmp))
+EV_NS_DEF_FN(PTR, getComponent, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetComponentID, cmp))
+EV_NS_DEF_FN(U32, setComponent, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetComponentID, cmp), (PTR, data))
+EV_NS_DEF_FN(void, modified, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetComponentID, comp))
+
+EV_NS_DEF_FN(AssetTagID, registerTag, (CONST_STR, tag_name))
+EV_NS_DEF_FN(bool, hasTag, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetTagID, tag))
+EV_NS_DEF_FN(U32, addTag, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetTagID, tag))
+EV_NS_DEF_FN(void, removeTag, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (AssetTagID, tag))
+
+EV_NS_DEF_FN(AssetSystemID, registerSystem, (CONST_STR, sig), (ECSPipelineStage, stage), (FN_PTR, fn), (CONST_STR, name))
+EV_NS_DEF_FN(void, setSystemRate, (AssetSystemID, system), (F32, rate))
+
+
+EV_NS_DEF_FN(void, setSingleton, (ECSAssetWorldHandle, world), (AssetComponentID, cmp), (PTR, data))
+EV_NS_DEF_FN(PTR, getSingleton, (ECSAssetWorldHandle, world), (AssetComponentID, cmp))
+
+EV_NS_DEF_FN(void, setOnAddTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onadd_fn)(ECSQuery),))
+EV_NS_DEF_FN(void, setOnRemoveTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onremove_fn)(ECSQuery),))
+EV_NS_DEF_FN(void, setOnSetTrigger, (CONST_STR, trigger_name), (CONST_STR, comp_name), (void(*onset_fn)(ECSQuery),))
+
+EV_NS_DEF_FN(AssetEntityID, createEntity, (ECSAssetWorldHandle, world_handle))
+EV_NS_DEF_FN(void, destroyEntity, (ECSAssetWorldHandle, world_handle), (AssetEntityID, entt))
+
+EV_NS_DEF_FN(AssetEntityID, createChildEntity, (ECSAssetWorldHandle, world_handle), (AssetEntityID, parent))
+EV_NS_DEF_FN(void, addChildToEntity, (ECSAssetWorldHandle, world_handle), (AssetEntityID, parent), (AssetEntityID, child))
+EV_NS_DEF_FN(void, forEachChild, (ECSAssetWorldHandle, world), (AssetEntityID, entt), (void(*iter_fn)(ECSAssetWorldHandle, AssetEntityID),))
+EV_NS_DEF_FN(AssetEntityID, getParent, (ECSAssetWorldHandle, world), (AssetEntityID, entt))
+
+/* EV_NS_DEF_FN(U32, enableEntity, (ECSAssetWorldHandle, world_handle), (AssetEntityID, entt)) */
+/* EV_NS_DEF_FN(U32, disableEntity, (ECSAssetWorldHandle, world_handle), (AssetEntityID, entt)) */
+/* EV_NS_DEF_FN(U32, lock, (ECSAssetWorldHandle, world_handle)) */
+/* EV_NS_DEF_FN(U32, unlock, (ECSAssetWorldHandle, world_handle)) */
+
 EV_NS_DEF_END(AssetECS)

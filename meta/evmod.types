@@ -13,6 +13,11 @@ TYPE(GameSystemID, GenericHandle)
 TYPE(GameComponentID, GenericHandle)
 TYPE(GameTagID, GenericHandle)
 
+TYPE(AssetEntityID, GenericHandle)
+TYPE(AssetSystemID, GenericHandle)
+TYPE(AssetComponentID, GenericHandle)
+TYPE(AssetTagID, GenericHandle)
+
 TYPE(ECSPipelineStage, enum {
     EV_ECS_PIPELINE_STAGE_PREUPDATE,
     EV_ECS_PIPELINE_STAGE_UPDATE,

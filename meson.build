@@ -14,6 +14,7 @@ mod_src = [
   'src/ecs/os_api.c',
   'src/ecs/common_ecs.c',
   'src/ecs/game_ecs.c',
+  'src/ecs/asset_ecs.c',
 ]
 
 mod_incdir = [

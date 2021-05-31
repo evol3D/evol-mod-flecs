@@ -5,6 +5,7 @@
 #include <flecs.h>
 
 #include <game_ecs.h>
+#include <asset_ecs.h>
 
 EV_CONSTRUCTOR 
 {
@@ -58,6 +59,33 @@ EV_BINDINGS
   EV_NS_BIND_FN(GameECS, modified          , ev_gameecs_modified);
   EV_NS_BIND_FN(GameECS, createChildEntity , ev_gameecs_createchildentity);
   EV_NS_BIND_FN(GameECS, addChildToEntity  , ev_gameecs_addchildtoentity);
+
+  EV_NS_BIND_FN(AssetECS, newWorld          , ev_assetecs_newworld);
+  EV_NS_BIND_FN(AssetECS, destroyWorld      , ev_assetecs_destroyworld);
+  EV_NS_BIND_FN(AssetECS, progress          , ev_assetecs_progress);
+  EV_NS_BIND_FN(AssetECS, createEntity      , ev_assetecs_createentity);
+  EV_NS_BIND_FN(AssetECS, destroyEntity     , ev_assetecs_destroyentity);
+  EV_NS_BIND_FN(AssetECS, registerComponent , ev_assetecs_registercomponent);
+  EV_NS_BIND_FN(AssetECS, getComponent      , ev_assetecs_getcomponent);
+  EV_NS_BIND_FN(AssetECS, setComponent      , ev_assetecs_setcomponent);
+  EV_NS_BIND_FN(AssetECS, hasComponent      , ev_assetecs_hascomponent);
+  EV_NS_BIND_FN(AssetECS, addComponent      , ev_assetecs_addcomponent);
+  EV_NS_BIND_FN(AssetECS, addTag            , ev_assetecs_addtag);
+  EV_NS_BIND_FN(AssetECS, hasTag            , ev_assetecs_hastag);
+  EV_NS_BIND_FN(AssetECS, removeTag         , ev_assetecs_removetag);
+  EV_NS_BIND_FN(AssetECS, registerTag       , ev_assetecs_registertag);
+  EV_NS_BIND_FN(AssetECS, registerSystem    , ev_assetecs_registersystem);
+  EV_NS_BIND_FN(AssetECS, setSystemRate     , ev_assetecs_setsystemrate);
+  EV_NS_BIND_FN(AssetECS, setOnAddTrigger   , ev_assetecs_setonaddtrigger);
+  EV_NS_BIND_FN(AssetECS, setOnRemoveTrigger, ev_assetecs_setonremovetrigger);
+  EV_NS_BIND_FN(AssetECS, setOnSetTrigger   , ev_assetecs_setonsettrigger);
+  EV_NS_BIND_FN(AssetECS, forEachChild      , ev_assetecs_foreachchild);
+  EV_NS_BIND_FN(AssetECS, getParent         , ev_assetecs_getparent);
+  EV_NS_BIND_FN(AssetECS, setSingleton      , ev_assetecs_setsingleton);
+  EV_NS_BIND_FN(AssetECS, getSingleton      , ev_assetecs_getsingleton);
+  EV_NS_BIND_FN(AssetECS, modified          , ev_assetecs_modified);
+  EV_NS_BIND_FN(AssetECS, createChildEntity , ev_assetecs_createchildentity);
+  EV_NS_BIND_FN(AssetECS, addChildToEntity  , ev_assetecs_addchildtoentity);
 }
 
 // The following section is left commented until a but in flecs is fixed. The
