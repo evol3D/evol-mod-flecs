@@ -569,6 +569,8 @@ ev_assetecs_destroyworld(
   vec_fini(world.components);
   vec_fini(world.tags);
   vec_fini(world.systems);
+
+  AssetECSData.assetWorlds[world_handle] = (AssetWorld) {NULL};
 }
 
 U32

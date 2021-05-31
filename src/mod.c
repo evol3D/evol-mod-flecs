@@ -17,12 +17,14 @@ EV_CONSTRUCTOR
   ecs_os_set_api(&api);
 
   ev_gameecs_init();
+  ev_assetecs_init();
 
   return 0;
 }
 
 EV_DESTRUCTOR 
 {
+  ev_assetecs_deinit();
   ev_gameecs_deinit();
   return 0;
 }
