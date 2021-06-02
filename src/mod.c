@@ -61,6 +61,10 @@ EV_BINDINGS
   EV_NS_BIND_FN(GameECS, modified          , ev_gameecs_modified);
   EV_NS_BIND_FN(GameECS, createChildEntity , ev_gameecs_createchildentity);
   EV_NS_BIND_FN(GameECS, addChildToEntity  , ev_gameecs_addchildtoentity);
+  EV_NS_BIND_FN(GameECS, setEntityName     , ev_gameecs_setentityname);
+  EV_NS_BIND_FN(GameECS, getEntityName     , ev_gameecs_getentityname);
+  EV_NS_BIND_FN(GameECS, getEntityFromName , ev_gameecs_getentityfromname);
+  EV_NS_BIND_FN(GameECS, getChildFromName  , ev_gameecs_getchildfromname);
 
   EV_NS_BIND_FN(AssetECS, newWorld          , ev_assetecs_newworld);
   EV_NS_BIND_FN(AssetECS, destroyWorld      , ev_assetecs_destroyworld);

@@ -153,3 +153,25 @@ U32
 ev_gameecs_progress(
     ECSGameWorldHandle world_handle,
     F32 deltaTime);
+
+void
+ev_gameecs_setentityname(
+    ECSGameWorldHandle world_handle,
+    GameEntityID entt,
+    const char *name);
+
+const char *
+ev_gameecs_getentityname(
+    ECSGameWorldHandle world_handle,
+    GameEntityID entt);
+
+GameEntityID
+ev_gameecs_getentityfromname(
+    ECSGameWorldHandle world_handle,
+    const char *name);
+
+GameEntityID
+ev_gameecs_getchildfromname(
+    ECSGameWorldHandle world_handle,
+    GameEntityID parent,
+    const char *name);

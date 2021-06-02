@@ -49,6 +49,11 @@ EV_NS_DEF_FN(GameEntityID, getParent, (ECSGameWorldHandle, world), (GameEntityID
 /* EV_NS_DEF_FN(U32, lock, (ECSGameWorldHandle, world_handle)) */
 /* EV_NS_DEF_FN(U32, unlock, (ECSGameWorldHandle, world_handle)) */
 
+EV_NS_DEF_FN(void, setEntityName, (ECSGameWorldHandle, world_handle), (GameEntityID, entt), (CONST_STR, name))
+EV_NS_DEF_FN(CONST_STR, getEntityName, (ECSGameWorldHandle, world_handle), (GameEntityID, entt))
+EV_NS_DEF_FN(GameEntityID, getEntityFromName, (ECSGameWorldHandle, world_handle), (CONST_STR, name))
+EV_NS_DEF_FN(GameEntityID, getChildFromName, (ECSGameWorldHandle, world_handle), (GameEntityID, parent), (CONST_STR, name))
+
 EV_NS_DEF_END(GameECS)
 
 

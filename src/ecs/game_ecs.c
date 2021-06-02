@@ -579,3 +579,41 @@ ev_gameecs_progress(
   GameWorld world = GameECSData.gameWorlds[world_handle];
   return ecs_progress(world.ecs_world, deltaTime)?0:1;
 }
+
+void
+ev_gameecs_setentityname(
+    ECSGameWorldHandle world_handle,
+    GameEntityID entt,
+    const char *name)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+  ecs_set(world.ecs_world, entt, EcsName, {.alloc_value=(char*)name});
+}
+
+const char *
+ev_gameecs_getentityname(
+    ECSGameWorldHandle world_handle,
+    GameEntityID entt)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+  return ecs_get_name(world.ecs_world, entt);
+}
+
+GameEntityID
+ev_gameecs_getentityfromname(
+    ECSGameWorldHandle world_handle,
+    const char *name)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+  return ecs_lookup_fullpath(world.ecs_world, name);
+}
+
+GameEntityID
+ev_gameecs_getchildfromname(
+    ECSGameWorldHandle world_handle,
+    GameEntityID parent,
+    const char *name)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+  return ecs_lookup_path(world.ecs_world, parent, name);
+}
