@@ -564,11 +564,23 @@ void
 ev_gameecs_destroyworld(
     ECSGameWorldHandle world_handle)
 {
-  GameWorld world = GameECSData.gameWorlds[world_handle];
-  ecs_fini(world.ecs_world);
-  vec_fini(world.components);
-  vec_fini(world.tags);
-  vec_fini(world.systems);
+  GameWorld *world = &GameECSData.gameWorlds[world_handle];
+  if(world->ecs_world) {
+    ecs_fini(world->ecs_world);
+    world->ecs_world = NULL;
+  }
+  if(world->components) {
+    vec_fini(world->components);
+    world->components = NULL;
+  }
+  if(world->tags) {
+    vec_fini(world->tags);
+    world->tags = NULL;
+  }
+  if(world->systems) {
+    vec_fini(world->systems);
+    world->systems = NULL;
+  }
 }
 
 U32
