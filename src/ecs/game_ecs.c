@@ -301,6 +301,26 @@ ev_gameecs_setcomponent(
   return 0;
 }
 
+U32 
+ev_gameecs_setcomponentraw(
+    ECSGameWorldHandle world,
+    GameEntityID entt, 
+    GameComponentID cmp,
+    PTR data)
+{
+  ecs_world_t *ecs_world = GameECSData.gameWorlds[world].ecs_world;
+  ecs_record_t *entt_record = ecs_record_find(ecs_world, entt);
+
+  ECSComponentID cmp_id = GameECSData.gameWorlds[world].components[cmp];
+  U32 cmp_size = GameECSData.gameComponents[cmp].size;
+  I32 cmp_column = ecs_table_find_column(entt_record->table, cmp_id);
+
+  PTR dest = ecs_record_get_column(entt_record, cmp_column, cmp_size);
+  memcpy(dest, data, cmp_size);
+
+  return 0;
+}
+
 const PTR
 ev_gameecs_getcomponent(
     ECSGameWorldHandle world_handle,

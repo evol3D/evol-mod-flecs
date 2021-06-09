@@ -39,6 +39,13 @@ ev_gameecs_setcomponent(
     GameComponentID cmp,
     PTR data);
 
+U32 
+ev_gameecs_setcomponentraw(
+    ECSGameWorldHandle world,
+    GameEntityID entt, 
+    GameComponentID cmp,
+    PTR data);
+
 bool
 ev_gameecs_hascomponent(
     ECSGameWorldHandle world_handle,
