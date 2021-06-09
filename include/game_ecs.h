@@ -20,8 +20,14 @@ U32
 ev_gameecs_update(
   F32 deltaTime);
 
-PTR
+const PTR
 ev_gameecs_getcomponent(
+    ECSGameWorldHandle world_handle,
+    GameEntityID entt,
+    GameComponentID cmp);
+
+PTR
+ev_gameecs_getcomponentmut(
     ECSGameWorldHandle world_handle,
     GameEntityID entt,
     GameComponentID cmp);

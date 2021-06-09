@@ -42,6 +42,7 @@ EV_BINDINGS
   EV_NS_BIND_FN(GameECS, destroyEntity     , ev_gameecs_destroyentity);
   EV_NS_BIND_FN(GameECS, registerComponent , ev_gameecs_registercomponent);
   EV_NS_BIND_FN(GameECS, getComponent      , ev_gameecs_getcomponent);
+  EV_NS_BIND_FN(GameECS, getComponentMut   , ev_gameecs_getcomponentmut);
   EV_NS_BIND_FN(GameECS, setComponent      , ev_gameecs_setcomponent);
   EV_NS_BIND_FN(GameECS, hasComponent      , ev_gameecs_hascomponent);
   EV_NS_BIND_FN(GameECS, addComponent      , ev_gameecs_addcomponent);

@@ -301,8 +301,18 @@ ev_gameecs_setcomponent(
   return 0;
 }
 
-PTR
+const PTR
 ev_gameecs_getcomponent(
+    ECSGameWorldHandle world_handle,
+    GameEntityID entt,
+    GameComponentID cmp)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle?world_handle:GameECSData.activeWorld];
+  return ecs_get_w_entity(world.ecs_world, entt, world.components[cmp]);
+}
+
+PTR
+ev_gameecs_getcomponentmut(
     ECSGameWorldHandle world_handle,
     GameEntityID entt,
     GameComponentID cmp)
