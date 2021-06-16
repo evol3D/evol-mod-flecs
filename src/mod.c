@@ -43,6 +43,7 @@ EV_BINDINGS
   EV_NS_BIND_FN(GameECS, registerComponent , ev_gameecs_registercomponent);
   EV_NS_BIND_FN(GameECS, getComponent      , ev_gameecs_getcomponent);
   EV_NS_BIND_FN(GameECS, getComponentMut   , ev_gameecs_getcomponentmut);
+  EV_NS_BIND_FN(GameECS, getComponentRaw   , ev_gameecs_getcomponentraw);
   EV_NS_BIND_FN(GameECS, setComponent      , ev_gameecs_setcomponent);
   EV_NS_BIND_FN(GameECS, setComponentRaw   , ev_gameecs_setcomponentraw);
   EV_NS_BIND_FN(GameECS, hasComponent      , ev_gameecs_hascomponent);
@@ -67,6 +68,9 @@ EV_BINDINGS
   EV_NS_BIND_FN(GameECS, getEntityName     , ev_gameecs_getentityname);
   EV_NS_BIND_FN(GameECS, getEntityFromName , ev_gameecs_getentityfromname);
   EV_NS_BIND_FN(GameECS, getChildFromName  , ev_gameecs_getchildfromname);
+  EV_NS_BIND_FN(GameECS, deferBegin        , ev_gameecs_deferbegin);
+  EV_NS_BIND_FN(GameECS, deferEnd          , ev_gameecs_deferend);
+  EV_NS_BIND_FN(GameECS, mergeWorld        , ev_gameecs_mergeworld);   
 
   EV_NS_BIND_FN(AssetECS, newWorld          , ev_assetecs_newworld);
   EV_NS_BIND_FN(AssetECS, destroyWorld      , ev_assetecs_destroyworld);

@@ -18,6 +18,7 @@ EV_NS_DEF_FN(bool, hasComponent, (ECSGameWorldHandle, world), (GameEntityID, ent
 EV_NS_DEF_FN(U32, addComponent, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp))
 EV_NS_DEF_FN(const PTR, getComponent, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp))
 EV_NS_DEF_FN(PTR, getComponentMut, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp))
+EV_NS_DEF_FN(PTR, getComponentRaw, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp))
 EV_NS_DEF_FN(U32, setComponent, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp), (PTR, data))
 EV_NS_DEF_FN(U32, setComponentRaw, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, cmp), (PTR, data))
 EV_NS_DEF_FN(void, modified, (ECSGameWorldHandle, world), (GameEntityID, entt), (GameComponentID, comp))
@@ -55,6 +56,11 @@ EV_NS_DEF_FN(void, setEntityName, (ECSGameWorldHandle, world_handle), (GameEntit
 EV_NS_DEF_FN(CONST_STR, getEntityName, (ECSGameWorldHandle, world_handle), (GameEntityID, entt))
 EV_NS_DEF_FN(GameEntityID, getEntityFromName, (ECSGameWorldHandle, world_handle), (CONST_STR, name))
 EV_NS_DEF_FN(GameEntityID, getChildFromName, (ECSGameWorldHandle, world_handle), (GameEntityID, parent), (CONST_STR, name))
+
+EV_NS_DEF_FN(void, deferBegin, (ECSGameWorldHandle, world_handle))
+EV_NS_DEF_FN(void, deferEnd, (ECSGameWorldHandle, world_handle))
+
+EV_NS_DEF_FN(void, mergeWorld, (ECSGameWorldHandle, world_handle))
 
 EV_NS_DEF_END(GameECS)
 

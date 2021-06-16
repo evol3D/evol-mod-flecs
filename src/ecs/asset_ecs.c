@@ -581,3 +581,20 @@ ev_assetecs_progress(
   AssetWorld world = AssetECSData.assetWorlds[world_handle];
   return ecs_progress(world.ecs_world, deltaTime)?0:1;
 }
+
+
+void
+ev_gameecs_deferbegin(
+    ECSGameWorldHandle world_handle)
+{
+  AssetWorld world = AssetECSData.assetWorlds[world_handle];
+  ecs_defer_begin(world.ecs_world);
+}
+
+void
+ev_gameecs_deferend(
+    ECSGameWorldHandle world_handle)
+{
+  AssetWorld world = AssetECSData.assetWorlds[world_handle];
+  ecs_defer_end(world.ecs_world);
+}

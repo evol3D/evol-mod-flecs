@@ -188,3 +188,21 @@ ev_gameecs_getchildfromname(
     ECSGameWorldHandle world_handle,
     GameEntityID parent,
     const char *name);
+
+void
+ev_gameecs_deferbegin(
+    ECSGameWorldHandle world_handle);
+
+void
+ev_gameecs_deferend(
+    ECSGameWorldHandle world_handle);
+
+void
+ev_gameecs_mergeworld(
+    ECSGameWorldHandle world_handle);
+
+PTR
+ev_gameecs_getcomponentraw(
+    ECSGameWorldHandle world,
+    GameEntityID entt,
+    GameComponentID cmp);

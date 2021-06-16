@@ -3,6 +3,7 @@
 
 #include <flecs.h>
 #include <evol/common/ev_types.h>
+#include <evol/common/ev_log.h>
 
 typedef struct {
   evstring name;
@@ -301,6 +302,33 @@ ev_gameecs_setcomponent(
   return 0;
 }
 
+PTR
+ev_gameecs_getcomponentraw(
+    ECSGameWorldHandle world,
+    GameEntityID entt,
+    GameComponentID cmp)
+{
+  ecs_world_t *ecs_world = GameECSData.gameWorlds[world].ecs_world;
+  ecs_record_t *entt_record = ecs_record_find(ecs_world, entt);
+  if(!entt_record) {
+    return NULL;
+  }
+
+  ecs_table_t *table = entt_record->table;
+  if(!table) {
+    return NULL;
+  }
+
+  ECSComponentID cmp_id = GameECSData.gameWorlds[world].components[cmp];
+  U32 cmp_size = GameECSData.gameComponents[cmp].size;
+  I32 cmp_column = ecs_table_find_column(table, cmp_id);
+  if(cmp_column == -1) {
+    return NULL;
+  }
+
+  return ecs_record_get_column(entt_record, cmp_column, cmp_size);
+}
+
 U32 
 ev_gameecs_setcomponentraw(
     ECSGameWorldHandle world,
@@ -311,9 +339,24 @@ ev_gameecs_setcomponentraw(
   ecs_world_t *ecs_world = GameECSData.gameWorlds[world].ecs_world;
   ecs_record_t *entt_record = ecs_record_find(ecs_world, entt);
 
+  ecs_table_t *table = entt_record->table;
+
   ECSComponentID cmp_id = GameECSData.gameWorlds[world].components[cmp];
   U32 cmp_size = GameECSData.gameComponents[cmp].size;
-  I32 cmp_column = ecs_table_find_column(entt_record->table, cmp_id);
+  I32 cmp_column = -1;
+
+  if(table) {
+    cmp_column = ecs_table_find_column(table, cmp_id);
+  }
+
+  if(cmp_column == -1) {
+    ecs_type_t old_type = ecs_type_from_entity(ecs_world, entt);
+    ecs_type_t new_type = ecs_type_add(ecs_world, old_type, cmp_id);
+
+    table = ecs_table_from_type(ecs_world, new_type);
+    ecs_table_insert(ecs_world, table, entt, entt_record);
+    cmp_column = ecs_table_find_column(table, cmp_id);
+  }
 
   PTR dest = ecs_record_get_column(entt_record, cmp_column, cmp_size);
   memcpy(dest, data, cmp_size);
@@ -658,4 +701,12 @@ ev_gameecs_getchildfromname(
 {
   GameWorld world = GameECSData.gameWorlds[world_handle];
   return ecs_lookup_path(world.ecs_world, parent, name);
+}
+
+void
+ev_gameecs_mergeworld(
+    ECSGameWorldHandle world_handle)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+  ecs_merge(world.ecs_world);
 }
