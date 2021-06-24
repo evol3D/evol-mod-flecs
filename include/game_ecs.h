@@ -206,3 +206,13 @@ ev_gameecs_getcomponentraw(
     ECSGameWorldHandle world,
     GameEntityID entt,
     GameComponentID cmp);
+
+GameQueryID
+ev_gameecs_registerquery(
+    CONST_STR signature);
+
+void
+ev_gameecs_runsystem(
+    ECSGameWorldHandle world_handle,
+    GameQueryID query,
+    void(*system)(ECSQuery));

@@ -62,6 +62,10 @@ EV_NS_DEF_FN(void, deferEnd, (ECSGameWorldHandle, world_handle))
 
 EV_NS_DEF_FN(void, mergeWorld, (ECSGameWorldHandle, world_handle))
 
+EV_NS_DEF_FN(GameQueryID, registerQuery, (CONST_STR, signature))
+
+EV_NS_DEF_FN(void, runSystem, (ECSGameWorldHandle, world_handle), (GameQueryID, query), (void(*system)(ECSQuery),));
+
 EV_NS_DEF_END(GameECS)
 
 

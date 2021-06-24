@@ -12,6 +12,7 @@ TYPE(GameEntityID, GenericHandle)
 TYPE(GameSystemID, GenericHandle)
 TYPE(GameComponentID, GenericHandle)
 TYPE(GameTagID, GenericHandle)
+TYPE(GameQueryID, GenericHandle)
 
 TYPE(AssetEntityID, GenericHandle)
 TYPE(AssetSystemID, GenericHandle)

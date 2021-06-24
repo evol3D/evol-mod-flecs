@@ -36,10 +36,15 @@ typedef struct {
 } GameTrigger;
 
 typedef struct {
+  evstring signature;
+} GameQuery;
+
+typedef struct {
   ecs_world_t *ecs_world;
   vec(ECSComponentID) components;
   vec(ECSTagID) tags;
   vec(ECSSystemID) systems;
+  vec(ecs_query_t *) queries;
 
   ecs_entity_t pipeline_stages[EV_ECS_PIPELINE_STAGE_COUNT];
 } GameWorld;
@@ -50,6 +55,7 @@ struct {
   vec(GameTag) gameTags;
   vec(GameSystem) gameSystems;
   vec(GameTrigger) gameTriggers;
+  vec(GameQuery) gameQueries;
 
   ECSGameWorldHandle activeWorld;
 } GameECSData;
@@ -95,6 +101,25 @@ gamecomponent_copy(
   dstComp->alignment = srcComp->alignment;
   dstComp->size = srcComp->size;
   dstComp->name = evstring_new(srcComp->name);
+}
+
+void
+gamequery_copy(
+    void *dst,
+    const void *src)
+{
+  GameQuery *dstQuery = (GameQuery *)dst;
+  const GameQuery *srcQuery = (GameQuery *)src;
+
+  dstQuery->signature = evstring_new(srcQuery->signature);
+}
+
+void
+gamequery_destr(
+    void *data)
+{
+  GameQuery *query = (GameQuery *)data;
+  evstring_free(query->signature);
 }
 
 void
@@ -168,18 +193,20 @@ ev_gameecs_init()
 {
   GameECSData.gameWorlds = vec_init(GameWorld, NULL, gameworld_destr);
   vec_setlen((vec_t*)&GameECSData.gameWorlds, 1);
-  GameECSData.gameWorlds[0] = (GameWorld){NULL};
+  GameECSData.gameWorlds[0] = (GameWorld){0};
   GameECSData.activeWorld = 0;
 
   GameECSData.gameComponents = vec_init(GameComponent, gamecomponent_copy, gamecomponent_destr);
   GameECSData.gameTags = vec_init(GameTag, gametag_copy, gametag_destr);
   GameECSData.gameSystems = vec_init(GameSystem, gamesystem_copy, gamesystem_destr);
   GameECSData.gameTriggers = vec_init(GameTrigger, gametrigger_copy, gametrigger_destr);
+  GameECSData.gameQueries = vec_init(GameQuery, gamequery_copy, gamequery_destr);
 }
 
 void
 ev_gameecs_deinit()
 {
+  vec_fini(GameECSData.gameQueries);
   vec_fini(GameECSData.gameTriggers);
   vec_fini(GameECSData.gameSystems);
   vec_fini(GameECSData.gameTags);
@@ -195,7 +222,8 @@ ev_gameecs_newworld()
     .ecs_world = ecs_init(),
     .components = vec_init(ECSComponentID),
     .tags = vec_init(ECSTagID),
-    .systems = vec_init(ECSSystemID)
+    .systems = vec_init(ECSSystemID),
+    .queries = vec_init(ecs_query_t*)
   };
 
   new_gameworld.pipeline_stages[EV_ECS_PIPELINE_STAGE_PREUPDATE] = EcsPreUpdate;
@@ -223,6 +251,12 @@ ev_gameecs_newworld()
     if(sys.rate > 0.f) {
       ev_ecs_setsystemrate(new_gameworld.ecs_world, new_gameworld.systems[i], sys.rate);
     }
+  }
+
+  vec_setlen((vec_t*)&new_gameworld.queries, vec_len(GameECSData.gameQueries));
+  for(size_t i = 0; i < vec_len(GameECSData.gameQueries); i++) {
+    GameQuery query = GameECSData.gameQueries[i];
+    new_gameworld.queries[i] = ecs_query_new(new_gameworld.ecs_world, query.signature);
   }
 
   for(size_t i = 0; i < vec_len(GameECSData.gameTriggers); i++) {
@@ -268,6 +302,25 @@ ev_gameecs_registercomponent(
     ECSComponentID comp_id = ecs_new_component(GameECSData.gameWorlds[worldIndex].ecs_world, 0, cmp_name, cmp_size, cmp_align);
     vec_push((vec_t*)&GameECSData.gameWorlds[worldIndex].components, &comp_id);
     DEBUG_ASSERT(vec_len(GameECSData.gameComponents) == vec_len(GameECSData.gameWorlds[worldIndex].components));
+  }
+
+  return id;
+}
+
+GameQueryID
+ev_gameecs_registerquery(
+    CONST_STR signature)
+{
+  GameQueryID id = vec_push((vec_t*)&GameECSData.gameQueries, &(GameQuery) {
+      .signature = signature
+  });
+
+  for(size_t worldIndex = 1; worldIndex < vec_len(GameECSData.gameWorlds); worldIndex++) {
+    if(GameECSData.gameWorlds[worldIndex].ecs_world == NULL) continue;
+
+    ecs_query_t* query = ecs_query_new(GameECSData.gameWorlds[worldIndex].ecs_world, signature);
+    vec_push((vec_t*)&GameECSData.gameWorlds[worldIndex].queries, &query);
+    DEBUG_ASSERT(vec_len(GameECSData.gameQueries) == vec_len(GameECSData.gameWorlds[worldIndex].queries));
   }
 
   return id;
@@ -654,6 +707,10 @@ ev_gameecs_destroyworld(
     vec_fini(world->systems);
     world->systems = NULL;
   }
+  if(world->queries) {
+    vec_fini(world->queries);
+    world->queries = NULL;
+  }
 }
 
 U32
@@ -709,4 +766,20 @@ ev_gameecs_mergeworld(
 {
   GameWorld world = GameECSData.gameWorlds[world_handle];
   ecs_merge(world.ecs_world);
+}
+
+void
+ev_gameecs_runsystem(
+    ECSGameWorldHandle world_handle,
+    GameQueryID query,
+    void(*system)(ECSQuery))
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+
+  ecs_query_t *q = world.queries[query];
+  ecs_iter_t it = ecs_query_iter(q);
+
+  while (ecs_query_next(&it)) {
+    system(&it);
+  }
 }

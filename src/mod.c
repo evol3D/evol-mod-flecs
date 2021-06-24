@@ -71,6 +71,8 @@ EV_BINDINGS
   EV_NS_BIND_FN(GameECS, deferBegin        , ev_gameecs_deferbegin);
   EV_NS_BIND_FN(GameECS, deferEnd          , ev_gameecs_deferend);
   EV_NS_BIND_FN(GameECS, mergeWorld        , ev_gameecs_mergeworld);   
+  EV_NS_BIND_FN(GameECS, registerQuery     , ev_gameecs_registerquery);
+  EV_NS_BIND_FN(GameECS, runSystem         , ev_gameecs_runsystem);
 
   EV_NS_BIND_FN(AssetECS, newWorld          , ev_assetecs_newworld);
   EV_NS_BIND_FN(AssetECS, destroyWorld      , ev_assetecs_destroyworld);
