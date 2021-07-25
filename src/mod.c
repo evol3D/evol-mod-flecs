@@ -38,6 +38,8 @@ EV_BINDINGS
   EV_NS_BIND_FN(GameECS, newWorld          , ev_gameecs_newworld);
   EV_NS_BIND_FN(GameECS, destroyWorld      , ev_gameecs_destroyworld);
   EV_NS_BIND_FN(GameECS, progress          , ev_gameecs_progress);
+  EV_NS_BIND_FN(GameECS, lock              , ev_gameecs_lock);
+  EV_NS_BIND_FN(GameECS, unlock            , ev_gameecs_unlock);
   EV_NS_BIND_FN(GameECS, createEntity      , ev_gameecs_createentity);
   EV_NS_BIND_FN(GameECS, destroyEntity     , ev_gameecs_destroyentity);
   EV_NS_BIND_FN(GameECS, registerComponent , ev_gameecs_registercomponent);

@@ -783,3 +783,19 @@ ev_gameecs_runsystem(
     system(&it);
   }
 }
+
+void
+ev_gameecs_lock(
+    ECSGameWorldHandle world_handle)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+  ecs_lock(world.ecs_world);
+}
+
+void
+ev_gameecs_unlock(
+    ECSGameWorldHandle world_handle)
+{
+  GameWorld world = GameECSData.gameWorlds[world_handle];
+  ecs_unlock(world.ecs_world);
+}
